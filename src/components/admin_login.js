@@ -23,6 +23,7 @@ export default function AdminLogin(props) {
         localStorage.setItem('user_id', data._id);
         // localStorage.setItem('admin', data.admin);
         localStorage.setItem('email', data.email);
+        localStorage.setItem('name', data.name);
         localStorage.setItem('password', data.password);
         localStorage.setItem('userType','admin')
         dispatch(setUserData(data));

@@ -45,9 +45,6 @@ export default function New_Applications(props) {
       const data = await changeApplicationStatus(status, application._id, reason,application.candidate,application.title);
       if (data) {
         props.showAlert(`Application ${status}ed successfully`, "success");
-        setTimeout(() => {
-          props.showAlert(`mail send successfully`, "success");
-        }, 10000);
         setReason("");
         fetchJobApplications();
         setView(false);

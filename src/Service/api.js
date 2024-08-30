@@ -119,7 +119,9 @@ export const application_info=async(uid,jid)=>{
 
 export const changeApplicationStatus=async(status,id,reason,candidate,jobTitle)=>{
     // const adminmail=localStorage.getItem()
-    const body={ status,id,reason,candidate,jobTitle}
+    const adminName=localStorage.getItem('name')
+    const admin_mail=localStorage.getItem('email')
+    const body={ status,id,reason,candidate,jobTitle,adminName,admin_mail}
     console.log(body);
     const response=await axios.post('http://localhost:5000/admin/upateStatus',body)
     console.log(response.data);
