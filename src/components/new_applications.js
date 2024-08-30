@@ -184,7 +184,7 @@ const Card = (props) => {
           <h5 className="card-title">{title || "NA"}</h5>
           <h6 className="card-title">{candidate_Name ?? "NA"}</h6>
           <p><strong>Status: </strong>{status}</p>
-          <p><strong>Score: </strong>{AtsScore ?? "00"}</p>
+          <p><strong>AtsScore: </strong>{AtsScore ?? "00"}</p>
         </div>
         <div className="text-center">
           <button
