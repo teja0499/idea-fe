@@ -17,6 +17,7 @@ export default function AdminLogin(props) {
       const data = await  Adminlogin(email, password);
       console.log(data);
       
+      
       if (data) {
         console.log(data);
         
@@ -41,6 +42,7 @@ export default function AdminLogin(props) {
       props.showAlert(error?.response?.data?.message, "danger");
     }
   };
+ 
 
   
 

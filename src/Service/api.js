@@ -98,7 +98,6 @@ export const findJobById=async(id)=>{
     return response.data
 }
 
-
 export const new_job_application=async()=>{
     console.log("all jobs");
     const response=await axios.get('http://localhost:5000/admin/new_job_application')
@@ -142,5 +141,20 @@ export const get_all_job_application=async()=>{
     return response.data
 }
 
+export const get_All_Category=async()=>{
+    const response=await axios.get('http://localhost:5000/admin/get_Job_Categorie')
+    return response.data; 
+}
 
+export const deleteCategory=async(id)=>{
+    const response=await axios.delete(`http://localhost:5000/admin/delete_Categorie/${id}`)
+    console.log(response.data);
+    
+}
+
+export const add_Category=async(category)=>{
+    
+    const response=await axios.post('http://localhost:5000/admin/add_category',{category})
+    return response.data;
+}
 

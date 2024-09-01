@@ -51,19 +51,8 @@ export default function Login(props) {
   //   }
   // }
 
-  // useEffect(() => {  
-  //   if (localStorage.length !== 0) {
-  //     havingData();
-  //     if(localStorage.getItem('admin')==='true')
-  //     {
-  //       navigate('/admin-dashboard');
-  //     }
-  //     else{
-  //       navigate('/add-feedback');
-  //     }
-  //   }
 
-  // }, []);
+
 
   return (
     <div className='container col-12 col-md-5' style={{ marginBottom: '5rem' }}>

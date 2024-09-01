@@ -1,5 +1,6 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Adminlogin, user_Login } from '../Service/api';
 
 export default function Navbar() {
     const location = useLocation();
@@ -14,6 +15,33 @@ export default function Navbar() {
     const getNavLinkClass = (path) => (
         pathname === path ? 'nav-link active fw-bold' : 'nav-link'
     );
+    const checkUser=async ()=>{
+        try {
+            const userType=localStorage.getItem('userType')
+            if(userType==='admin')
+            {
+              const data=await  Adminlogin(localStorage.getItem('email'),localStorage.getItem('password'))
+              if(data)
+              {
+                navigate('/admin/new-application');
+              }
+            }else if(userType==='user')
+            {
+                const data=await user_Login(localStorage.getItem('email'),localStorage.getItem('password'))
+                if(data)
+                    {
+                        navigate("/user/jobs")
+                    }
+            }
+        } catch (error) {
+            localStorage.clear()
+            console.log(error);
+            
+        }
+    }
+    useEffect(()=>{
+        checkUser()
+    },[])
 
     return (
         // <div className='container'>
