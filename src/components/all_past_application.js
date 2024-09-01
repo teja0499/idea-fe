@@ -51,22 +51,24 @@ export default function All_Past_Application(props) {
       {!view && !loading && applicationsData.length!==0&& (
         <div>
           <table className='table table-bordered'>
-            <thead className='thead-dark'>
-              <tr style={{ backgroundColor: '#f8f8f8' }}>
+            <thead className='thead-dark text-center'>
+              <tr style={{ backgroundColor:'' }}>
                 <th className='col-1'>ID</th>
-                <th className='col-2'>Title</th>
+                <th className='col-1'>Title</th>
+                <th className='col-2'>Skills</th>
                 <th className='col-1'>ATS Score</th>
-                <th className='col-3'>Status</th>
+                <th className='col-1'>Status</th>
                 <th className='col-1'>Action</th>
               </tr>
             </thead>
             <tbody>
               {applicationsData.map((item, index) => (
-                <tr key={item._id}>
+                <tr key={item._id} className='text-center'>
                   <td>{index + 1}</td>
                   <td>{item.title || ''}</td>
-                  <td>{item.ats_score || ''}</td>
-                  <td>{item.status}</td>
+                  <td>{item.candidate_Skills?.join(', ') || ''}</td>
+                  <td >{item.AtsScore || ''}</td>
+                  <td className={`${item.status==='reject'?'bg-danger':'bg-success'}`}>{item.status}</td>
                   <td>
                     <button
                       type='button'
