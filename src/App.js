@@ -13,6 +13,7 @@ import Past_Application from './components/User/past_application';
 import Current_Job from './components/User/current_job';
 import All_Past_Application from './components/all_past_application';
 import Edit_User_Application from './components/edit_user_application';
+import Forget_Password from './components/forget_password';
 
 
 
@@ -53,6 +54,7 @@ function App() {
           {/* <Route path="/admin/past-application" element={<Past_Application showAlert={showAlert}   />} /> */}
           <Route path="/admin/allpast-application" element={<All_Past_Application showAlert={showAlert}   />} />
           <Route path="/admin/update-user-application" element={<Edit_User_Application showAlert={showAlert}   />} />
+          <Route path='/forget-password' element={<Forget_Password showAlert={showAlert} />} />
         </Routes>
       {/* </div> */}
     </Router>

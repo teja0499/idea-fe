@@ -134,7 +134,7 @@ export const get_all_job_application=async()=>{
     return response.data
 }
 
-    export const update_user_application =async(id,body)=>{
+ export const update_user_application =async(id,body)=>{
     console.log("update application",id,body);
     const response=await axios.put(`http://localhost:5000/admin/update-user-application/${id}`,body)
     console.log(response.data);
@@ -158,3 +158,32 @@ export const add_Category=async(category)=>{
     return response.data;
 }
 
+export const forget_password = async (email) => {
+    
+     const response = await axios.post('http://localhost:5000/user/forget_password', {email}, {
+         headers: {
+             'Content-Type': 'application/json',
+         },
+     });
+     return response.data;
+};
+
+export const check_OTP = async (email,otp) => {
+    
+    const response = await axios.post('http://localhost:5000/user/check_otp', {email,otp}, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.data;
+};
+
+export const reset_Password = async (email,password) => {
+    
+    const response = await axios.post('http://localhost:5000/user/reset_password', {email,password}, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.data;
+};

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Adminlogin, user_Login } from '../Service/api';
 import { useDispatch } from 'react-redux';
 import { setAdmin, setId, setUserData } from './redux/reducer/authSlice'; 
@@ -96,9 +96,10 @@ export default function Login(props) {
           >
             Register
           </button>
+         <div> <Link to={'/forget-password'}>Forget password</Link></div>
         </div>
       </form>
-      
+     
      </div>
   );
 }
