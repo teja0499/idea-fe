@@ -119,6 +119,12 @@ export default function New_Applications(props) {
                   <td>₹{job?.salary ?? 'NA'} per annum</td>
                   <td>₹{application?.candidate_salary ?? 'NA'}</td>
                 </tr>
+
+                <tr>
+                  <td><strong>Salary</strong></td>
+                  <td>₹{job?.salary ?? 'NA'} per annum</td>
+                  <td>₹{application?.candidate_salary ?? 'NA'}</td>
+                </tr>
                 <tr>
                   <td><strong>Type</strong></td>
                   <td>{job?.type ?? 'NA'}</td>

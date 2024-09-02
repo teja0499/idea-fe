@@ -127,6 +127,11 @@ export default function Current_Job(props) {
             <p><strong>Experience:</strong> {jobData.experience} years</p>
             <p><strong>Salary:</strong> ₹{jobData.salary} per annum</p>
             <p><strong>Type:</strong> {jobData.type}</p>
+            {jobData.customFields && Object.entries(jobData.customFields).map(([key, value]) => (
+                        <li key={key} className="list-group-item d-flex justify-content-between align-items-center">
+                            <span> <strong>{key} : </strong>{value}</span>
+                            </li>
+                    ))}
           </div>
           <button className="btn btn-primary" onClick={job_apply}>
             Apply

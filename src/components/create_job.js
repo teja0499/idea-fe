@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { add_Category, create_job, deleteCategory, get_All_Category } from '../Service/api';
-import { ReactComponent as DeleteIcon } from '../images/DeleteIcon.svg';
 
 export default function Create_Job(props) {
     const [formData, setFormData] = useState({
@@ -10,18 +9,52 @@ export default function Create_Job(props) {
         description: '',
         skills: [''],
         experience: '',
-        salary: ''
+        salary: '',
+        customFields: {}
     });
 
     const [categories, setCategories] = useState([]);
     const [newCategory, setNewCategory] = useState("");
     const [isAddingCategory, setIsAddingCategory] = useState(false);
+    const [customField, setCustomField] = useState({ key: '', value: '' });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
             [name]: value
+        });
+    };
+
+    const handleCustomFieldChange = (e) => {
+        const { name, value } = e.target;
+        setCustomField({
+            ...customField,
+            [name]: value
+        });
+    };
+
+    const addCustomField = () => {
+        if (customField.key && customField.value) {
+            setFormData({
+                ...formData,
+                customFields: {
+                    ...formData.customFields,
+                    [customField.key]: customField.value
+                }
+            });
+            setCustomField({ key: '', value: '' });
+        } else {
+            props.showAlert("Please provide both key and value for the custom field.", "danger");
+        }
+    };
+
+    const removeCustomField = (keyToRemove) => {
+        const updatedCustomFields = { ...formData.customFields };
+        delete updatedCustomFields[keyToRemove];
+        setFormData({
+            ...formData,
+            customFields: updatedCustomFields
         });
     };
 
@@ -77,12 +110,8 @@ export default function Create_Job(props) {
     const addCategory = async (e) => {
         e.preventDefault();
         try {
-            const data = await add_Category(newCategory);
+            await add_Category(newCategory);
             setIsAddingCategory(false);
-            setFormData({
-                ...formData,
-                category: "",
-            });
             get_Category();
             setNewCategory("");
         } catch (error) {
@@ -94,46 +123,29 @@ export default function Create_Job(props) {
     const get_Category = async () => {
         try {
             const data = await get_All_Category();
-            console.log(data);
-            
             setCategories(data);
         } catch (error) {
             props.showAlert("Internal server issue", "danger");
         }
     };
 
-    const delete_Category=async(e)=>{
+    const delete_Category = async (e) => {
         e.preventDefault();
         try {
-            console.log(formData.category);
-            let id;
-            for(let i=0;i<categories.length;i++)
-            {
-                if(formData.category===categories[i].category)
-                {
-                   id=categories[i]._id;
-                   break;
-                }
+            const categoryToDelete = categories.find(category => category.category === formData.category);
+            if (categoryToDelete) {
+                await deleteCategory(categoryToDelete._id);
+                get_Category();
+                setFormData({ ...formData, category: "" });
             }
-            console.log(id);
-            
-            const data=await deleteCategory(id)
-            get_Category();
-            setNewCategory("");
-            setFormData({
-                ...formData,
-                category:"",
-            });
-            
         } catch (error) {
             console.log(error);
-            props.showAlert("Internal server issue","danger")
+            props.showAlert("Internal server issue", "danger");
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
         try {
             const data = await create_job(formData);
             if (!data) {
@@ -146,8 +158,10 @@ export default function Create_Job(props) {
                     description: '',
                     skills: [''],
                     experience: '',
-                    salary: ''
+                    salary: '',
+                    customFields: {}
                 });
+                setCustomField({ key: '', value: '' })
                 props.showAlert("Job successfully created", "success");
             }
         } catch (error) {
@@ -156,8 +170,6 @@ export default function Create_Job(props) {
     };
 
     useEffect(() => {
-        console.log("Hi");
-        
         get_Category();
     }, []);
 
@@ -167,26 +179,28 @@ export default function Create_Job(props) {
                 <div className="col-md-6 mb-3">
                     <label className="form-label">Category:</label>
                     {!isAddingCategory ? (
-                       <div>
-                         <select
-                            name="category"
-                            className="form-control"
-                            value={formData.category}
-                            onChange={handleCategoryChange}
-                        >
-                            <option value="" disabled>Select a category</option>
-                            {categories.map((category) => (
-                                <option key={category._id} value={category.category}>
-                                    {category.category}
-                                  
-                                </option>
-                            ))}
-                            <option value="add-new">Add New Category</option>
-                        </select>
-                       {formData.category.length!==0 && <button className="btn btn-danger mt-2 mx-2" onClick={delete_Category} >
-                                Delete Category
-                            </button>}
-                       </div>
+                        <div>
+                            <select
+                                name="category"
+                                className="form-control"
+                                value={formData.category}
+                                onChange={handleCategoryChange}
+                                required
+                            >
+                                <option value="" disabled>Select a category</option>
+                                {categories.map((category) => (
+                                    <option key={category._id} value={category.category}>
+                                        {category.category}
+                                    </option>
+                                ))}
+                                <option value="add-new">Add New Category</option>
+                            </select>
+                            {formData.category && (
+                                <button className="btn btn-danger mt-2 mx-2" onClick={delete_Category}>
+                                    Delete Category
+                                </button>
+                            )}
+                        </div>
                     ) : (
                         <div>
                             <input
@@ -200,7 +214,7 @@ export default function Create_Job(props) {
                             <button className="btn btn-primary mt-2" onClick={addCategory}>
                                 Add
                             </button>
-                            <button className="btn btn-danger mt-2 mx-2" onClick={()=>{ setIsAddingCategory(false)}}>
+                            <button className="btn btn-danger mt-2 mx-2" onClick={() => setIsAddingCategory(false)}>
                                 Cancel
                             </button>
                         </div>
@@ -263,7 +277,7 @@ export default function Create_Job(props) {
                     />
                 </div>
 
-                <div className="col-md-6 mb-3">
+                <div className="col-md-6 mb-1">
                     <label className="form-label">Skills:</label>
                     {formData.skills.map((skill, index) => (
                         <div key={index} className="input-group mb-2">
@@ -280,7 +294,7 @@ export default function Create_Job(props) {
                                     className="btn btn-danger"
                                     onClick={() => removeSkill(index)}
                                 >
-                                    Remove
+                                    Remove Skill
                                 </button>
                             )}
                         </div>
@@ -291,22 +305,57 @@ export default function Create_Job(props) {
                 </div>
             </div>
 
-            <div className="row">
-                <div className="col-md-12 mb-3">
-                    <label className="form-label">Description:</label>
-                    <textarea
-                        name="description"
-                        className="form-control"
-                        value={formData.description}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
+            <div className="mb-3">
+                <label className="form-label">Description:</label>
+                <textarea
+                    name="description"
+                    className="form-control"
+                    value={formData.description}
+                    onChange={handleChange}
+                    rows="3"
+                    required
+                ></textarea>
             </div>
 
-            <button type="submit" className="btn btn-primary">
-                Submit
-            </button>
+            <div className="mb-3">
+                <label className="form-label">Custom Fields:</label>
+                <div className="input-group mb-2">
+                    <input
+                        type="text"
+                        name="key"
+                        className="form-control"
+                        placeholder="Field Name"
+                        value={customField.key}
+                        onChange={handleCustomFieldChange}
+                       
+                    />
+                    <input
+                        type="text"
+                        name="value"
+                        className="form-control"
+                        placeholder="Field Value"
+                        value={customField.value}
+                        onChange={handleCustomFieldChange}
+                       
+                    />
+                    <button type="button" className="btn btn-secondary" onClick={addCustomField}>
+                        Add Custom Field
+                    </button>
+                </div>
+
+                <ul className="list-group">
+                    {Object.entries(formData.customFields).map(([key, value]) => (
+                        <li key={key} className="list-group-item d-flex justify-content-between align-items-center">
+                            <span>{`${key}: ${value}`}</span>
+                            <button type="button" className="btn btn-danger" onClick={() => removeCustomField(key)}>
+                                Remove
+                            </button>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <button type="submit" className="btn btn-primary">Submit</button>
         </form>
     );
 }
